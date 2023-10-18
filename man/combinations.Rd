@@ -19,7 +19,7 @@ combinations(
 
 \item{r}{Numeric. Number of elements to choose.}
 
-\item{v}{Numeric vector. Default sequence from 1 to n.}
+\item{v}{vector or list containing the objects that should be combined. Default sequence from 1 to n.}
 
 \item{set}{Logical. If TRUE, remove duplicate values from the input vector.}
 
@@ -27,16 +27,16 @@ combinations(
 
 \item{count.permutations}{Logical. If TRUE, returns the number of permutations corresponding to each combination.}
 
-\item{out_format}{Character. Either 'auto' or another desired format. 'auto' will try to convert to a data.table.}
+\item{out_format}{Character. The desired format for the output, either "matrix", "dataframe", "tibble", "datatable", or "auto".}
 }
 \value{
-A data.table or matrix with the computed combinations.
+A matrix, dataframe, tibble, or datatable with the computed combinations.
 }
 \description{
-Compute combinations from a vector.
+Compute combinations of set of objects
 }
 \examples{
 combinations(n = 4, r = 2)
 combinations(n = 4, r = 2, repeats.allowed = TRUE)
-combinations(n = 4, r = 2, count.permutations = TRUE)
+combinations(n = 4, r = 2, repeats.allowed = TRUE, count.permutations = TRUE)
 }

@@ -1,23 +1,23 @@
-#' Combinations
+#' Permutations
 #'
-#' Compute combinations of set of objects
+#' Compute permutations of a set of objects.
 #'
 #' @param n Numeric. Number of elements in the vector.
-#' @param r Numeric. Number of elements to choose.
-#' @param v vector or list containing the objects that should be combined. Default sequence from 1 to n.
+#' @param r Numeric. Number of elements to permute.
+#' @param v vector or list containing the objects that should be permuted. Default sequence from 1 to n.
 #' @param set Logical. If TRUE, remove duplicate values from the input vector.
-#' @param repeats.allowed Logical. If TRUE, combinations with repetition are allowed.
-#' @param count.permutations Logical. If TRUE, returns the number of permutations corresponding to each combination.
+#' @param repeats.allowed Logical. If TRUE, permutations with repetition are allowed.
+#' @param count.permutations Logical. If TRUE, returns the number of identical permutations for each permutation.
 #' @param out_format Character. The desired format for the output, either "matrix", "dataframe", "tibble", "datatable", or "auto".
 #'
-#' @return A matrix, dataframe, tibble, or datatable with the computed combinations.
+#' @return A matrix, dataframe, tibble, or datatable with the computed permutations.
 #' @export
 #'
 #' @examples
-#' combinations(n = 4, r = 2)
-#' combinations(n = 4, r = 2, repeats.allowed = TRUE)
-#' combinations(n = 4, r = 2, repeats.allowed = TRUE, count.permutations = TRUE)
-combinations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, count.permutations = FALSE, out_format = 'auto') {
+#' permutations(n = 4, r = 2)
+#' permutations(n = 4, r = 2, repeats.allowed = TRUE)
+#' permutations(n = 4, r = 2, repeats.allowed = TRUE, count.permutations = TRUE)
+permutations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, count.permutations = FALSE, out_format = 'auto') {
   if (mode(n) != "numeric" || length(n) != 1 || n < 1 || (n%%1) != 0)
     stop("bad value of n")
   if (mode(r) != "numeric" || length(r) != 1 || r < 1 || (r%%1) != 0)
@@ -38,20 +38,17 @@ combinations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, co
     warning('`out_format` should be one of ("auto", "matrix", "dataframe", "tibble", "datatable"). Setting to "auto".')
     out_format <- 'auto'
   }
-  if(isFALSE(repeats.allowed) & count.permutations){
-    warning('There can be no permutations without repeats.')
-    count.permutations <- FALSE
-  }
 
+  # Call to C++ functions for permutations
   if(repeats.allowed & count.permutations)
-    out <- combinationsWithRepetition_counts(n,r)
+    out <- permutationsWithRepetition_counts(n, r)
   else if(repeats.allowed)
-    out <- combinationsWithRepetition(n,r)
+    out <- permutationsWithRepetition(n, r)
   else
-    out <- combinationsWithoutRepetition(n,r)
+    out <- permutationsWithoutRepetition(n, r)  # This function should be added to C++
 
   actual_format <- 'matrix'
-  n_rows <- ifelse(repeats.allowed, choose(n+r-1,r), choose(n,r))
+  n_rows <- ifelse(repeats.allowed, n^r, factorial(n) / factorial(n - r))
   if (out_format == 'auto') {
     if (n_rows <= 1e2) {
       out_format <- "matrix"

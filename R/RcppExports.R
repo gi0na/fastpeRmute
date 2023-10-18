@@ -5,6 +5,10 @@ combinationsWithRepetition_counts <- function(n, r) {
     .Call(`_fastpeRmute_combinationsWithRepetition_counts`, n, r)
 }
 
+permutationsWithRepetition_counts <- function(n, r) {
+    .Call(`_fastpeRmute_permutationsWithRepetition_counts`, n, r)
+}
+
 combinationsWithRepetition <- function(n, r) {
     .Call(`_fastpeRmute_combinationsWithRepetition`, n, r)
 }

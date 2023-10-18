@@ -22,6 +22,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// permutationsWithRepetition_counts
+IntegerMatrix permutationsWithRepetition_counts(int n, int r);
+RcppExport SEXP _fastpeRmute_permutationsWithRepetition_counts(SEXP nSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(permutationsWithRepetition_counts(n, r));
+    return rcpp_result_gen;
+END_RCPP
+}
 // combinationsWithRepetition
 IntegerMatrix combinationsWithRepetition(int n, int r);
 RcppExport SEXP _fastpeRmute_combinationsWithRepetition(SEXP nSEXP, SEXP rSEXP) {
@@ -73,6 +85,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_fastpeRmute_combinationsWithRepetition_counts", (DL_FUNC) &_fastpeRmute_combinationsWithRepetition_counts, 2},
+    {"_fastpeRmute_permutationsWithRepetition_counts", (DL_FUNC) &_fastpeRmute_permutationsWithRepetition_counts, 2},
     {"_fastpeRmute_combinationsWithRepetition", (DL_FUNC) &_fastpeRmute_combinationsWithRepetition, 2},
     {"_fastpeRmute_combinationsWithoutRepetition", (DL_FUNC) &_fastpeRmute_combinationsWithoutRepetition, 2},
     {"_fastpeRmute_permutationsWithoutRepetition", (DL_FUNC) &_fastpeRmute_permutationsWithoutRepetition, 2},

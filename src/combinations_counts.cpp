@@ -13,49 +13,85 @@ void initializeFactorialTable(int n) {
 
 // [[Rcpp::export]]
 IntegerMatrix combinationsWithRepetition_counts(int n, int r) {
-  
+
   std::vector<int> v(n);
-  
+
   for(int i = 0; i < n; ++i) {
     v[i] = i + 1;
   }
   int numCombs = Rf_choose(n + r - 1, r);
   IntegerMatrix result(numCombs, r + 1);
-  
+
   initializeFactorialTable(r);
-  
+
   std::vector<int> indices(r, 0);
   std::vector<int> freq(n, 0);
-  
+
   for (int row = 0; row < numCombs; row++) {
     std::fill(freq.begin(), freq.end(), 0);
     int combProduct = 1;
-    
+
     for (int col = 0; col < r; col++) {
       result(row, col) = v[indices[col]];
       freq[indices[col]]++;
     }
-    
+
     for (int i = 0; i < n; i++) {
       combProduct *= factorialTable[freq[i]];
     }
-    
+
     result(row, r) = combProduct;
-    
+
     int idx = r - 1;
     while (idx >= 0 && indices[idx] == n - 1) {
       idx--;
     }
-    
+
     if (idx < 0) {
       break;
     }
-    
+
     indices[idx]++;
     for (int j = idx + 1; j < r; j++) {
       indices[j] = indices[idx];
     }
   }
-  
+
+  return result;
+}
+
+// [[Rcpp::export]]
+IntegerMatrix permutationsWithRepetition_counts(int n, int r) {
+
+  std::vector<int> v(n);
+
+  for(int i = 0; i < n; ++i) {
+    v[i] = i + 1;
+  }
+
+  int numPerms = std::pow(n, r); // n^r permutations with repetition
+  IntegerMatrix result(numPerms, r + 1);
+
+  initializeFactorialTable(r);
+
+  for (int row = 0; row < numPerms; row++) {
+    int temp = row;
+    std::vector<int> freq(n, 0);
+    int identicalPerms = 1; // start with 1 as if all elements were distinct
+
+    for (int col = 0; col < r; col++) {
+      int index = temp % n;
+      result(row, col) = v[index];
+      freq[index]++;
+      temp /= n;
+    }
+
+    for (int i = 0; i < n; i++) {
+      identicalPerms *= factorialTable[freq[i]];
+    }
+
+    result(row, r) = identicalPerms;
+  }
+
   return result;
 }
