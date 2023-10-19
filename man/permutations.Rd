@@ -2,12 +2,12 @@
 % Please edit documentation in R/permutations.R
 \name{permutations}
 \alias{permutations}
-\title{Permutations}
+\title{Compute Permutations of Elements}
 \usage{
 permutations(
-  n,
+  n = NULL,
   r,
-  v = 1:n,
+  v = NULL,
   set = TRUE,
   repeats.allowed = FALSE,
   count.permutations = FALSE,
@@ -15,28 +15,45 @@ permutations(
 )
 }
 \arguments{
-\item{n}{Numeric. Number of elements in the vector.}
+\item{n}{Numeric. The number of elements in the input set. If `v` is provided, `n` is ignored.}
 
-\item{r}{Numeric. Number of elements to permute.}
+\item{r}{Numeric. The number of elements selected for each permutation.}
 
-\item{v}{vector or list containing the objects that should be permuted. Default sequence from 1 to n.}
+\item{v}{A vector or list containing the objects to be permuted. If not specified,
+it defaults to a sequence from 1 to `n`.}
 
-\item{set}{Logical. If TRUE, remove duplicate values from the input vector.}
+\item{set}{Logical. If TRUE, the function will remove duplicate values from the input vector `v`.}
 
-\item{repeats.allowed}{Logical. If TRUE, permutations with repetition are allowed.}
+\item{repeats.allowed}{Logical. Determines whether permutations with repetition are allowed.
+Default is FALSE.}
 
-\item{count.permutations}{Logical. If TRUE, returns the number of identical permutations for each permutation.}
+\item{count.permutations}{Logical. If set to TRUE, an additional column will be appended to the output
+indicating the number of identical permutations for each row.}
 
-\item{out_format}{Character. The desired format for the output, either "matrix", "dataframe", "tibble", "datatable", or "auto".}
+\item{out_format}{A character string specifying the desired format for the output. Valid options are
+"matrix", "dataframe", "tibble", "datatable", or "auto". If "auto" is chosen, the function
+will decide the most suitable format based on other input parameters.}
 }
 \value{
-A matrix, dataframe, tibble, or datatable with the computed permutations.
+Depending on the `out_format` specified, the function returns permutations as a matrix,
+        dataframe, tibble, or datatable. If `count.permutations` is TRUE, the last column of the output
+        will indicate the number of identical permutations for each permutation.
 }
 \description{
-Compute permutations of a set of objects.
+This function calculates permutations of a set of objects. It offers flexibility in allowing for
+permutations with repetition, as well as returning counts of identical permutations.
+It also provides different output formats tailored for further processing or analysis.
 }
 \examples{
+# Basic permutation without repetition
 permutations(n = 4, r = 2)
+
+# Permutation with repetition
 permutations(n = 4, r = 2, repeats.allowed = TRUE)
+
+# Permutation with repetition and count of identical permutations
 permutations(n = 4, r = 2, repeats.allowed = TRUE, count.permutations = TRUE)
+
+# Using a custom vector of objects for permutations
+permutations(v = c("apple", "banana", "cherry"), r = 2)
 }

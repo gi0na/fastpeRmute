@@ -1,0 +1,126 @@
+---
+title: "fastpeRmute"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{fastpeRmute}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# fastpeRmute: Fast Combinations and Permutations in R
+
+The fastpeRmute package offers efficient functions for computing combinations and permutations with and without repetition in R. It is tailored for high performance and provides functionality that can be faster than both base R and the gtools package.
+
+## Installation
+
+To install the latest development version from GitHub:
+```
+devtools::install_github("your_github_username/fastpeRmute")
+```
+
+## Examples
+
+### Combinations
+
+#### Without Repetition
+
+Load the library:
+```{r}
+library(fastpeRmute)
+library(tidyverse)
+```
+
+Compute combinations without repetition:
+```{r}
+combinations(n = 10, r = 4)
+```
+
+#### With Repetition
+
+Compute combinations with repetition:
+```{r}
+combinations(n = 10, r = 4, repeats.allowed = T)
+```
+
+### Permutations
+
+#### Without Repetition
+
+Compute permutations without repetition:
+```{r}
+permutations(n = 4, r = 2)
+```
+
+#### With Repetition
+
+Compute permutations with repetition:
+```{r}
+permutations(n = 4, r = 2, repeats.allowed = T)
+```
+
+## Performance Benchmark
+
+Let's benchmark the performance of fastpeRmute against base R and gtools:
+
+### Combinations With Repetition
+
+fastpeRmute:
+```{r}
+system.time(result <- fastpeRmute:::combinationsWithRepetition(60, 5))
+```
+
+gtools:
+```{r}
+system.time(result2 <- gtools::combinations(n = 60, r = 5, repeats.allowed = TRUE))
+all((result %>% as_tibble() %>% arrange(V1,V2,V3,V4,V5) %>% as.matrix()) == result2)
+```
+
+### Combinations Without Repetition
+
+fastpeRmute:
+```{r}
+system.time(result <- fastpeRmute:::combinationsWithoutRepetition(60, 5))
+```
+
+base R:
+```{r}
+system.time(combn(x = 60, m = 5))
+```
+
+gtools:
+```{r}
+system.time(result2 <- gtools::combinations(n = 60, r = 5, repeats.allowed = FALSE))
+all((result %>% as_tibble() %>% arrange(V1,V2,V3,V4,V5) %>% as.matrix()) == result2)
+```
+
+### Permutations Without Repetition
+
+fastpeRmute:
+```{r}
+system.time(result <- permutations(30,5))
+```
+
+gtools:
+```{r}
+system.time(result2 <- gtools::permutations(n = 30, r = 5, repeats.allowed = FALSE))
+all((result %>% as_tibble() %>% arrange(V1,V2,V3,V4,V5) %>% as.matrix()) == result2)
+```
+
+### Permutations With Repetition
+
+fastpeRmute:
+```{r}
+system.time(result <- permutations(50,5, repeats.allowed = TRUE))
+```
+
+gtools:
+```{r}
+system.time(result2 <- gtools::permutations(n = 50, r = 5, repeats.allowed = TRUE))
+all((result %>% as_tibble() %>% arrange(V1,V2,V3,V4,V5) %>% as.matrix()) == result2)
+```
+
+As observed in the benchmarks, fastpeRmute provides a competitive performance edge, ensuring faster computations for large datasets.
+
+## Contributions & Feedback
+
+Feel free to raise issues, contribute to the codebase, or provide any feedback about the package on our [GitHub repository](https://github.com/your_github_username/fastpeRmute).

@@ -13,6 +13,10 @@ combinationsWithRepetition <- function(n, r) {
     .Call(`_fastpeRmute_combinationsWithRepetition`, n, r)
 }
 
+combinationsWithRepetitionTest <- function(n, r) {
+    .Call(`_fastpeRmute_combinationsWithRepetitionTest`, n, r)
+}
+
 combinationsWithoutRepetition <- function(n, r) {
     .Call(`_fastpeRmute_combinationsWithoutRepetition`, n, r)
 }

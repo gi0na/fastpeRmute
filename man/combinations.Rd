@@ -2,12 +2,12 @@
 % Please edit documentation in R/combinations.R
 \name{combinations}
 \alias{combinations}
-\title{Combinations}
+\title{Compute Combinations of Elements}
 \usage{
 combinations(
-  n,
+  n = NULL,
   r,
-  v = 1:n,
+  v = NULL,
   set = TRUE,
   repeats.allowed = FALSE,
   count.permutations = FALSE,
@@ -15,28 +15,45 @@ combinations(
 )
 }
 \arguments{
-\item{n}{Numeric. Number of elements in the vector.}
+\item{n}{Numeric. The number of elements in the input set. If `v` is provided, `n` is ignored.}
 
-\item{r}{Numeric. Number of elements to choose.}
+\item{r}{Numeric. The number of elements selected for each combination.}
 
-\item{v}{vector or list containing the objects that should be combined. Default sequence from 1 to n.}
+\item{v}{A vector or list containing the objects to be combined. If not specified,
+it defaults to a sequence from 1 to `n`.}
 
-\item{set}{Logical. If TRUE, remove duplicate values from the input vector.}
+\item{set}{Logical. If TRUE, the function will remove duplicate values from the input vector `v`.}
 
-\item{repeats.allowed}{Logical. If TRUE, combinations with repetition are allowed.}
+\item{repeats.allowed}{Logical. Determines whether combinations with repetition are allowed.
+Default is FALSE.}
 
-\item{count.permutations}{Logical. If TRUE, returns the number of permutations corresponding to each combination.}
+\item{count.permutations}{Logical. If set to TRUE, an additional column will be appended to the output
+indicating the number of permutations corresponding to each combination.}
 
-\item{out_format}{Character. The desired format for the output, either "matrix", "dataframe", "tibble", "datatable", or "auto".}
+\item{out_format}{A character string specifying the desired format for the output. Valid options are
+"matrix", "dataframe", "tibble", "datatable", or "auto". If "auto" is chosen, the function
+will decide the most suitable format based on other input parameters.}
 }
 \value{
-A matrix, dataframe, tibble, or datatable with the computed combinations.
+Depending on the `out_format` specified, the function returns combinations as a matrix,
+        dataframe, tibble, or datatable. If `count.permutations` is TRUE, the last column of the output
+        will indicate the number of permutations corresponding to each combination.
 }
 \description{
-Compute combinations of set of objects
+This function calculates combinations of a set of objects. It offers flexibility in allowing for
+combinations with repetition, as well as returning counts of corresponding permutations.
+It also provides different output formats tailored for further processing or analysis.
 }
 \examples{
+# Basic combination without repetition
 combinations(n = 4, r = 2)
+
+# Combination with repetition
 combinations(n = 4, r = 2, repeats.allowed = TRUE)
+
+# Combination with repetition and count of corresponding permutations
 combinations(n = 4, r = 2, repeats.allowed = TRUE, count.permutations = TRUE)
+
+# Using a custom vector of objects for combinations
+combinations(v = c("apple", "banana", "cherry"), r = 2)
 }

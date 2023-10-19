@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // combinationsWithRepetition_counts
-IntegerMatrix combinationsWithRepetition_counts(int n, int r);
+List combinationsWithRepetition_counts(int n, int r);
 RcppExport SEXP _fastpeRmute_combinationsWithRepetition_counts(SEXP nSEXP, SEXP rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -23,7 +23,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // permutationsWithRepetition_counts
-IntegerMatrix permutationsWithRepetition_counts(int n, int r);
+List permutationsWithRepetition_counts(int n, int r);
 RcppExport SEXP _fastpeRmute_permutationsWithRepetition_counts(SEXP nSEXP, SEXP rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -43,6 +43,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type r(rSEXP);
     rcpp_result_gen = Rcpp::wrap(combinationsWithRepetition(n, r));
+    return rcpp_result_gen;
+END_RCPP
+}
+// combinationsWithRepetitionTest
+IntegerMatrix combinationsWithRepetitionTest(int n, int r);
+RcppExport SEXP _fastpeRmute_combinationsWithRepetitionTest(SEXP nSEXP, SEXP rSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type r(rSEXP);
+    rcpp_result_gen = Rcpp::wrap(combinationsWithRepetitionTest(n, r));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -87,6 +99,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fastpeRmute_combinationsWithRepetition_counts", (DL_FUNC) &_fastpeRmute_combinationsWithRepetition_counts, 2},
     {"_fastpeRmute_permutationsWithRepetition_counts", (DL_FUNC) &_fastpeRmute_permutationsWithRepetition_counts, 2},
     {"_fastpeRmute_combinationsWithRepetition", (DL_FUNC) &_fastpeRmute_combinationsWithRepetition, 2},
+    {"_fastpeRmute_combinationsWithRepetitionTest", (DL_FUNC) &_fastpeRmute_combinationsWithRepetitionTest, 2},
     {"_fastpeRmute_combinationsWithoutRepetition", (DL_FUNC) &_fastpeRmute_combinationsWithoutRepetition, 2},
     {"_fastpeRmute_permutationsWithoutRepetition", (DL_FUNC) &_fastpeRmute_permutationsWithoutRepetition, 2},
     {"_fastpeRmute_permutationsWithRepetition", (DL_FUNC) &_fastpeRmute_permutationsWithRepetition, 2},

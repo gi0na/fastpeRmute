@@ -1,23 +1,55 @@
-#' Combinations
+#' Compute Combinations of Elements
 #'
-#' Compute combinations of set of objects
+#' This function calculates combinations of a set of objects. It offers flexibility in allowing for
+#' combinations with repetition, as well as returning counts of corresponding permutations.
+#' It also provides different output formats tailored for further processing or analysis.
 #'
-#' @param n Numeric. Number of elements in the vector.
-#' @param r Numeric. Number of elements to choose.
-#' @param v vector or list containing the objects that should be combined. Default sequence from 1 to n.
-#' @param set Logical. If TRUE, remove duplicate values from the input vector.
-#' @param repeats.allowed Logical. If TRUE, combinations with repetition are allowed.
-#' @param count.permutations Logical. If TRUE, returns the number of permutations corresponding to each combination.
-#' @param out_format Character. The desired format for the output, either "matrix", "dataframe", "tibble", "datatable", or "auto".
+#' @param n Numeric. The number of elements in the input set. If `v` is provided, `n` is ignored.
+#' @param r Numeric. The number of elements selected for each combination.
+#' @param v A vector or list containing the objects to be combined. If not specified,
+#'          it defaults to a sequence from 1 to `n`.
+#' @param set Logical. If TRUE, the function will remove duplicate values from the input vector `v`.
+#' @param repeats.allowed Logical. Determines whether combinations with repetition are allowed.
+#'                         Default is FALSE.
+#' @param count.permutations Logical. If set to TRUE, an additional column will be appended to the output
+#'                           indicating the number of permutations corresponding to each combination.
+#' @param out_format A character string specifying the desired format for the output. Valid options are
+#'                   "matrix", "dataframe", "tibble", "datatable", or "auto". If "auto" is chosen, the function
+#'                   will decide the most suitable format based on other input parameters.
 #'
-#' @return A matrix, dataframe, tibble, or datatable with the computed combinations.
+#' @return Depending on the `out_format` specified, the function returns combinations as a matrix,
+#'         dataframe, tibble, or datatable. If `count.permutations` is TRUE, the last column of the output
+#'         will indicate the number of permutations corresponding to each combination.
+#'
 #' @export
 #'
 #' @examples
+#' # Basic combination without repetition
 #' combinations(n = 4, r = 2)
+#'
+#' # Combination with repetition
 #' combinations(n = 4, r = 2, repeats.allowed = TRUE)
+#'
+#' # Combination with repetition and count of corresponding permutations
 #' combinations(n = 4, r = 2, repeats.allowed = TRUE, count.permutations = TRUE)
-combinations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, count.permutations = FALSE, out_format = 'auto') {
+#'
+#' # Using a custom vector of objects for combinations
+#' combinations(v = c("apple", "banana", "cherry"), r = 2)
+combinations <- function (n = NULL, r, v = NULL, set = TRUE, repeats.allowed = FALSE,
+                          count.permutations = FALSE, out_format = 'auto') {
+
+  # If neither n nor v is provided, throw an error
+  if (is.null(n) && is.null(v)) {
+    stop("Either 'n' or 'v' must be provided.")
+  }
+
+  # If v is provided and n is not, set n to the length of v
+  if (is.null(n) && !is.null(v)) {
+    n <- length(v)
+  } else if (!is.null(n) && is.null(v)) {
+    v <- 1:n
+  }
+
   if (mode(n) != "numeric" || length(n) != 1 || n < 1 || (n%%1) != 0)
     stop("bad value of n")
   if (mode(r) != "numeric" || length(r) != 1 || r < 1 || (r%%1) != 0)
@@ -43,8 +75,11 @@ combinations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, co
     count.permutations <- FALSE
   }
 
-  if(repeats.allowed & count.permutations)
+  if(repeats.allowed & count.permutations){
     out <- combinationsWithRepetition_counts(n,r)
+    factorialValues <- out$factorialValues
+    out <- out$combinations
+  }
   else if(repeats.allowed)
     out <- combinationsWithRepetition(n,r)
   else
@@ -62,14 +97,17 @@ combinations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, co
     }
   }
 
-  if(count.permutations){
-    col_names <- c(paste0("V", 1:r), 'n_permutations')
-  } else{
-    col_names <- paste0("V", 1:r)
-  }
+
+  col_names <- paste0("V", 1:r)
   colnames(out) <- col_names
-  if (out_format == 'dataframe') {
+
+  if(out_format == 'matrix' & count.permutations){
+    out <- cbind(out, n_permutations = factorialValues)
+  } else if (out_format == 'dataframe') {
     out <- as.data.frame(out)
+    if(count.permutations){
+      out$n_permutations <- factorialValues
+    }
     actual_format <- 'dataframe'
 
   } else if (out_format == 'tibble') {
@@ -80,16 +118,28 @@ combinations <- function (n, r, v = 1:n, set = TRUE, repeats.allowed = FALSE, co
       out <- as.data.frame(out)
       actual_format <- 'dataframe'
     }
+    if(count.permutations){
+      out$n_permutations <- factorialValues
+    }
 
   } else if (out_format == 'datatable') {
     if (requireNamespace("data.table", quietly = TRUE)) {
       out <- data.table::as.data.table(out)
+      if(count.permutations){
+        data.table::set(out, j = "n_permutations", value = factorialValues)
+      }
       actual_format <- 'datatable'
     } else if (requireNamespace("tibble", quietly = TRUE)) {
       out <- tibble::as_tibble(out)
+      if(count.permutations){
+        out$n_permutations <- factorialValues
+      }
       actual_format <- 'tibble'
     } else {
       out <- as.data.frame(out)
+      if(count.permutations){
+        out$n_permutations <- factorialValues
+      }
       actual_format <- 'dataframe'
     }
   }

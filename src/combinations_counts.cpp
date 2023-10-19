@@ -1,26 +1,28 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-std::vector<int> factorialTable;
+// This remains unchanged, but you'll want to use a double vector to hold the factorial values
+std::vector<double> factorialTable;
 
-void initializeFactorialTable(int n) {
-  factorialTable.resize(n + 1);
+void initializeFactorialTable(int r) {
+  factorialTable.resize(r + 1);
   factorialTable[0] = 1;
-  for (int i = 1; i <= n; i++) {
+  for (double i = 1; i <= r; i++) {
     factorialTable[i] = i * factorialTable[i - 1];
   }
 }
 
 // [[Rcpp::export]]
-IntegerMatrix combinationsWithRepetition_counts(int n, int r) {
+List combinationsWithRepetition_counts(int n, int r) {
 
   std::vector<int> v(n);
-
   for(int i = 0; i < n; ++i) {
     v[i] = i + 1;
   }
+
   int numCombs = Rf_choose(n + r - 1, r);
-  IntegerMatrix result(numCombs, r + 1);
+  IntegerMatrix result(numCombs, r);
+  NumericVector combProductValues(numCombs);
 
   initializeFactorialTable(r);
 
@@ -29,7 +31,7 @@ IntegerMatrix combinationsWithRepetition_counts(int n, int r) {
 
   for (int row = 0; row < numCombs; row++) {
     std::fill(freq.begin(), freq.end(), 0);
-    int combProduct = 1;
+    double combProduct = 1;
 
     for (int col = 0; col < r; col++) {
       result(row, col) = v[indices[col]];
@@ -40,7 +42,7 @@ IntegerMatrix combinationsWithRepetition_counts(int n, int r) {
       combProduct *= factorialTable[freq[i]];
     }
 
-    result(row, r) = combProduct;
+    combProductValues[row] = combProduct;
 
     int idx = r - 1;
     while (idx >= 0 && indices[idx] == n - 1) {
@@ -57,27 +59,29 @@ IntegerMatrix combinationsWithRepetition_counts(int n, int r) {
     }
   }
 
-  return result;
+  // Returning a List containing the matrix and the vector of double values
+  return List::create(_["combinations"] = result, _["factorialValues"] = combProductValues);
 }
 
+
 // [[Rcpp::export]]
-IntegerMatrix permutationsWithRepetition_counts(int n, int r) {
+List permutationsWithRepetition_counts(int n, int r) {
 
   std::vector<int> v(n);
-
   for(int i = 0; i < n; ++i) {
     v[i] = i + 1;
   }
 
   int numPerms = std::pow(n, r); // n^r permutations with repetition
-  IntegerMatrix result(numPerms, r + 1);
+  IntegerMatrix result(numPerms, r);
+  NumericVector identicalPermsValues(numPerms);
 
   initializeFactorialTable(r);
 
   for (int row = 0; row < numPerms; row++) {
     int temp = row;
     std::vector<int> freq(n, 0);
-    int identicalPerms = 1; // start with 1 as if all elements were distinct
+    double identicalPerms = 1; // start with 1 as if all elements were distinct
 
     for (int col = 0; col < r; col++) {
       int index = temp % n;
@@ -90,8 +94,9 @@ IntegerMatrix permutationsWithRepetition_counts(int n, int r) {
       identicalPerms *= factorialTable[freq[i]];
     }
 
-    result(row, r) = identicalPerms;
+    identicalPermsValues[row] = identicalPerms;
   }
 
-  return result;
+  // Returning a List containing the matrix and the vector of double values
+  return List::create(_["permutations"] = result, _["factorialValues"] = identicalPermsValues);
 }
