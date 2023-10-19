@@ -4,3 +4,9 @@
 .httr-oauth
 .DS_Store
 inst/doc
+/src/combinations_counts.o
+/src/combinations_fast.o
+/src/combinations_norep_fast.o
+/src/fastpeRmute.so
+/src/permutations_with_rep.o
+/src/RcppExports.o
