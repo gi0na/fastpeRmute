@@ -3,23 +3,16 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 IntegerMatrix permutationsWithRepetition(int n, int r) {
-  
-  std::vector<int> v(n);
-  
-  for(int i = 0; i < n; ++i) {
-    v[i] = i + 1;
-  }
-  // The total number of permutations with repetition is n^r
-  int totalPermutations = std::pow(n, r);
-  IntegerMatrix out(totalPermutations, r);
-  
-  for (int i = 0; i < totalPermutations; ++i) {
-    int temp = i;
-    for (int j = r - 1; j >= 0; --j) {
-      out(i, j) = v[temp % n];
-      temp /= n;
+  int totalRows = pow(n, r);
+  IntegerMatrix result(totalRows, r);
+
+  for (int row = 0; row < totalRows; row++) {
+    int tempRow = row;
+    for (int col = r - 1; col >= 0; --col) {
+      result(row, col) = tempRow % n + 1;
+      tempRow /= n;
     }
   }
-  
-  return out;
+
+  return result;
 }
