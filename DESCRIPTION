@@ -6,7 +6,8 @@ Author: Giona Casiraghi
 Maintainer: Giona Casiraghi <giona@ethz.ch>
 Description: The 'fastpeRmute' package offers a collection of efficient functions 
     for generating combinations and permutations, both with and without repetition.
-    Engineered for performance, these functions provide a significant speed boost 
+    Engineered for performance, the underlying implementation leverages C++.
+    These functions provide a significant speed boost 
     compared to the respective base R functions, making it ideal for computation-intensive tasks.
 License: AGPL
 Encoding: UTF-8
