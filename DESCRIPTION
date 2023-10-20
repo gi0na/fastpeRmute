@@ -10,7 +10,6 @@ Description: The 'fastpeRmute' package offers a collection of efficient function
     compared to the respective base R functions, making it ideal for computation-intensive tasks.
 License: AGPL
 Encoding: UTF-8
-LazyData: true
 Imports: Rcpp (>= 1.0.11)
 LinkingTo: Rcpp
 RoxygenNote: 7.2.3
