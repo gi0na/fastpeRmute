@@ -24,6 +24,6 @@ Suggests:
     gtools,
     ggplot2,
     microbenchmark,
-    tidyverses
+    tidyverse
 Config/testthat/edition: 3
 VignetteBuilder: knitr
