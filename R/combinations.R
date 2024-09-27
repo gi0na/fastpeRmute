@@ -148,7 +148,11 @@ combinations <- function (n = NULL, r, v = NULL, set = TRUE, repeats.allowed = F
   if(isFALSE(is.integer(v)) || any(v[1:n] !=(1:n))){
     if(actual_format == 'matrix'){
       if((isFALSE(count.permutations) & is.atomic(v)) || is.numeric(v)){
-        out[,1:r] <- apply(out[,1:r], 2, map_vals_from_v, v=v[1:n])
+        if(nrow(out)==1){
+          out[,1:r] <- map_vals_from_v(vals = out, v=v[1:n])
+        } else{
+          out[,1:r] <- apply(out[,1:r], 2, map_vals_from_v, v=v[1:n])
+        }
 
       } else{
         warning('v is not numeric. Returning the matrix of combinations reporting the indices of v.
