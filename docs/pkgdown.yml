@@ -1,0 +1,11 @@
+pandoc: 3.1.8
+pkgdown: 2.0.8
+pkgdown_sha: ~
+articles:
+  benchmark: benchmark.html
+  vignette: vignette.html
+last_built: 2024-10-11T18:55Z
+urls:
+  reference: https://gi0na.github.io/fastpeRmute/reference
+  article: https://gi0na.github.io/fastpeRmute/articles
+
