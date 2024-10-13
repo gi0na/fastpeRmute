@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   benchmark: benchmark.html
   vignette: vignette.html
-last_built: 2024-10-13T08:45Z
+last_built: 2024-10-13T08:49Z
 urls:
-  reference: https://gi0na.github.io/fastpeRmute/reference
-  article: https://gi0na.github.io/fastpeRmute/articles
+  reference: https://fastpermute.ghyper.net/reference
+  article: https://fastpermute.ghyper.net/articles
