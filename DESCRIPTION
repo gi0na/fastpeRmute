@@ -27,4 +27,4 @@ Suggests:
     tidyverse
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://fastpeRmute.ghyper.net
+URL: https://fastpeRmute.ghyper.net/
